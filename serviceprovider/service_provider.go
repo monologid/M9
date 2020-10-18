@@ -6,13 +6,13 @@ import (
 )
 
 var (
-	// FACEBOOK ...
+	// FACEBOOK service provider
 	FACEBOOK = "FACEBOOK"
 
-	// GOOGLE ...
+	// GOOGLE service provider
 	GOOGLE = "GOOGLE"
 
-	// TWITTER ...
+	// TWITTER service provider
 	TWITTER = "TWITTER"
 )
 
@@ -25,25 +25,25 @@ type IProvider interface {
 	GenerateGetProfileURI(accessToken string) string
 
 	GenerateAccessToken(uri string) (*AccessTokenSchema, error)
-	GetProfile(uri string) (*ProfileSchema, error)
+	GetProfile(uri string) (*map[string]interface{}, error)
 }
 
 // Provider ...
 type Provider struct {
 }
 
-// Get returns ...
-func (sp *Provider) Get(providerType string) (IProvider, error) {
+// Get returns the service provider object
+func (sp *Provider) Get(serviceProvider string) (IProvider, error) {
 	var provider IProvider
 	var err error
 
-	switch strings.ToUpper(providerType) {
+	switch strings.ToUpper(serviceProvider) {
 	case FACEBOOK:
 		provider = NewFacebook()
 	case GOOGLE:
 		provider = NewGoogle()
-	case TWITTER:
-		provider = NewGoogle()
+	// case TWITTER:
+	// 	provider = NewTwitter()
 	default:
 		err = errors.New("unidentified service provider")
 	}

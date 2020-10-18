@@ -65,13 +65,13 @@ func (fb *Facebook) GenerateAccessToken(uri string) (*AccessTokenSchema, error) 
 }
 
 // GetProfile ...
-func (fb *Facebook) GetProfile(uri string) (*ProfileSchema, error) {
+func (fb *Facebook) GetProfile(uri string) (*map[string]interface{}, error) {
 	resp, err := resty.New().R().Get(uri)
 	if err != nil {
 		return nil, err
 	}
 
-	var profileSchema ProfileSchema
+	var profileSchema map[string]interface{}
 	if err := json.Unmarshal(resp.Body(), &profileSchema); err != nil {
 		return nil, err
 	}
