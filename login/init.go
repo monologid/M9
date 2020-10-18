@@ -12,8 +12,8 @@ func emptyHandler(c echo.Context) error {
 }
 
 func New(app *echo.Echo) {
-	app.GET("/login/:social_media", SocialMediaHandler)
-	app.GET("/login/:social_media/callback", SocialMediaCallbackHandler)
+	app.GET("/login/oauth2/:provider", ProviderHandler)
+	app.GET("/login/oauth2/:provider/callback", ProviderCallbackHandler)
 
 	app.GET("/api/v1/login", APILoginHandler)
 	app.GET("/api/v1/login/metrics", emptyHandler, echo.WrapMiddleware(func(handler http.Handler) http.Handler {

@@ -1,62 +1,49 @@
 package login
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/monologid/m9/serviceprovider"
 )
 
-// SocialMediaHandler ...
-func SocialMediaHandler(c echo.Context) error {
-	socialMedia := c.Param("social_media")
+// ProviderHandler ...
+func ProviderHandler(c echo.Context) error {
+	provider := c.Param("provider")
 
-	service := NewService()
-
-	var err error
-
-	switch socialMedia {
-	case "facebook":
-		PrometheusLoginFacebookTotal.Inc()
-		return c.Redirect(http.StatusTemporaryRedirect, service.FacebookOAuth())
-	case "google":
-	case "twitter":
-	default:
-		err = errors.New("invalid social media")
-	}
-
+	serviceProvider, err := new(serviceprovider.Provider).Get(provider)
 	if err != nil {
-		return err
+		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	return nil
+	redirectURL := serviceProvider.GenerateOauthURI()
+
+	return c.Redirect(http.StatusTemporaryRedirect, redirectURL)
 }
 
-// SocialMediaCallbackHandler ...
-func SocialMediaCallbackHandler(c echo.Context) error {
-	socialMedia := c.Param("social_media")
+// ProviderCallbackHandler ...
+func ProviderCallbackHandler(c echo.Context) error {
+	provider := c.Param("provider")
+	code := c.QueryParam("code")
 
-	service := NewService()
-
-	var err error
-
-	switch socialMedia {
-	case "facebook":
-		PrometheusLoginFacebookSuccessTotal.Inc()
-		fbAccessTokenSchema, _ := service.FacebookOAuthGetAccessToken(c.QueryParam("code"))
-		resp, _ := service.FacebookOAuthGetProfile(fbAccessTokenSchema.AccessToken)
-		return c.JSON(http.StatusOK, resp)
-	case "google":
-	case "twitter":
-	default:
-		err = errors.New("invalid social media")
-	}
-
+	serviceProvider, err := new(serviceprovider.Provider).Get(provider)
 	if err != nil {
-		return err
+		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	return nil
+	tokenURL := serviceProvider.GenerateGetAccessTokenURI(code)
+	token, err := serviceProvider.GenerateAccessToken(tokenURL)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	profileURL := serviceProvider.GenerateGetProfileURI(token.AccessToken)
+	profile, err := serviceProvider.GetProfile(profileURL)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, profile)
 }
 
 // APILoginHandler ...
