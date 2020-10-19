@@ -11,9 +11,6 @@ var (
 
 	// GOOGLE service provider
 	GOOGLE = "GOOGLE"
-
-	// TWITTER service provider
-	TWITTER = "TWITTER"
 )
 
 // IProvider ...
@@ -42,8 +39,6 @@ func (sp *Provider) Get(serviceProvider string) (IProvider, error) {
 		provider = NewFacebook()
 	case GOOGLE:
 		provider = NewGoogle()
-	// case TWITTER:
-	// 	provider = NewTwitter()
 	default:
 		err = errors.New("unidentified service provider")
 	}

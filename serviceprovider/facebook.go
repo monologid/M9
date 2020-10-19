@@ -81,10 +81,20 @@ func (fb *Facebook) GetProfile(uri string) (*map[string]interface{}, error) {
 
 // NewFacebook ...
 func NewFacebook() IProvider {
+	graphqlURL := os.Getenv("FACEBOOK_GRAPH_URL")
+	if len(graphqlURL) == 0 {
+		graphqlURL = "https://graph.facebook.com/v4.0"
+	}
+
+	oauthURL := os.Getenv("FACEBOOK_OAUTH_URL")
+	if len(oauthURL) == 0 {
+		oauthURL = "https://www.facebook.com/v4.0/dialog/oauth"
+	}
+
 	return &Facebook{
 		ServiceProvider:  FACEBOOK,
-		GraphURL:         os.Getenv("FACEBOOK_GRAPH_URL"),
-		OauthURL:         os.Getenv("FACEBOOK_OAUTH_URL"),
+		GraphURL:         graphqlURL,
+		OauthURL:         oauthURL,
 		ClientID:         os.Getenv("FACEBOOK_CLIENT_ID"),
 		ClientSecret:     os.Getenv("FACEBOOK_CLIENT_SECRET"),
 		OauthRedirectURI: os.Getenv("FACEBOOK_OAUTH_REDIRECT_URI"),
