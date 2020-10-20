@@ -1,8 +1,10 @@
 package httpsvr
 
 import (
+	"context"
 	"net/http"
 	"os"
+	"os/signal"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -48,9 +50,25 @@ func (s *HTTPServer) Start() {
 		WriteTimeout: 30 * time.Second,
 	}
 
-	s.server.Logger.Fatal(s.server.StartServer(svr))
+	go func() {
+		if err := s.server.StartServer(svr); err != nil {
+			s.server.Logger.Info("shutting down the server")
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server with
+	// a timeout of 10 seconds.
+	quit := make(chan os.Signal)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := s.server.Shutdown(ctx); err != nil {
+		s.server.Logger.Fatal(err)
+	}
 }
 
+// New ...
 func New() IHTTPServer {
 	return &HTTPServer{}
 }
