@@ -9,6 +9,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/monologid/m9/config"
 )
 
 // IHTTPServer ...
@@ -39,15 +40,13 @@ func (s *HTTPServer) Server() *echo.Echo {
 
 // Start ...
 func (s *HTTPServer) Start() {
-	port := os.Getenv("PORT")
-	if len(port) == 0 {
-		port = "1323"
-	}
+	host := config.C.Application.Host
+	port := config.C.Application.Port
 
 	svr := &http.Server{
-		Addr:         ":" + port,
-		ReadTimeout:  30 * time.Second,
-		WriteTimeout: 30 * time.Second,
+		Addr:         host + ":" + port,
+		ReadTimeout:  config.C.Application.ReadTimeout * time.Second,
+		WriteTimeout: config.C.Application.WriteTimeout * time.Second,
 	}
 
 	go func() {
@@ -56,12 +55,10 @@ func (s *HTTPServer) Start() {
 		}
 	}()
 
-	// Wait for interrupt signal to gracefully shutdown the server with
-	// a timeout of 10 seconds.
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), config.C.Application.GracefulShutdownTimeout*time.Second)
 	defer cancel()
 	if err := s.server.Shutdown(ctx); err != nil {
 		s.server.Logger.Fatal(err)

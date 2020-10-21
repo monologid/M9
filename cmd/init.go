@@ -1,6 +1,16 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+)
+
+var (
+	module         string
+	configPath     string
+	databaseEngine string
+	databaseURL    string
+	debug          bool
+)
 
 // Initialize executes the cmd package
 func Initialize() {

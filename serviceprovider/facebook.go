@@ -2,9 +2,9 @@ package serviceprovider
 
 import (
 	"encoding/json"
-	"os"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/monologid/m9/config"
 )
 
 // Facebook ...
@@ -16,7 +16,7 @@ type Facebook struct {
 	ClientSecret     string
 	OauthRedirectURI string
 	OauthScope       string
-	ProfileAttribute string
+	Fields           string
 }
 
 // Get returns ...
@@ -45,7 +45,7 @@ func (fb *Facebook) GenerateGetAccessTokenURI(code string) string {
 // GenerateGetProfileURI ...
 func (fb *Facebook) GenerateGetProfileURI(accessToken string) string {
 	return fb.GraphURL + "/me" +
-		"?fields=" + fb.ProfileAttribute +
+		"?fields=" + fb.Fields +
 		"&access_token=" + accessToken
 }
 
@@ -81,12 +81,12 @@ func (fb *Facebook) GetProfile(uri string) (*map[string]interface{}, error) {
 
 // NewFacebook ...
 func NewFacebook() IProvider {
-	graphqlURL := os.Getenv("FACEBOOK_GRAPH_URL")
+	graphqlURL := config.C.Facebook.GraphURL
 	if len(graphqlURL) == 0 {
 		graphqlURL = "https://graph.facebook.com/v4.0"
 	}
 
-	oauthURL := os.Getenv("FACEBOOK_OAUTH_URL")
+	oauthURL := config.C.Facebook.Oauth.URL
 	if len(oauthURL) == 0 {
 		oauthURL = "https://www.facebook.com/v4.0/dialog/oauth"
 	}
@@ -95,10 +95,10 @@ func NewFacebook() IProvider {
 		ServiceProvider:  FACEBOOK,
 		GraphURL:         graphqlURL,
 		OauthURL:         oauthURL,
-		ClientID:         os.Getenv("FACEBOOK_CLIENT_ID"),
-		ClientSecret:     os.Getenv("FACEBOOK_CLIENT_SECRET"),
-		OauthRedirectURI: os.Getenv("FACEBOOK_OAUTH_REDIRECT_URI"),
-		OauthScope:       os.Getenv("FACEBOOK_OAUTH_SCOPE"),
-		ProfileAttribute: os.Getenv("FACEBOOK_PROFILE_ATTRIBUTE"),
+		ClientID:         config.C.Facebook.ClientID,
+		ClientSecret:     config.C.Facebook.ClientSecret,
+		OauthRedirectURI: config.C.Facebook.Oauth.RedirectURI,
+		OauthScope:       config.C.Facebook.Oauth.Scope,
+		Fields:           config.C.Facebook.Oauth.Fields,
 	}
 }

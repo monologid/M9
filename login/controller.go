@@ -43,7 +43,21 @@ func ProviderCallbackHandler(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, profile)
+	profileSchema := serviceprovider.Provider{
+		ServiceProvider: provider,
+		ProfileMetadata: *profile,
+	}
+
+	// Tasks:
+	loginService := NewService()
+
+	// - Store data into database
+	loginService.SignIn(profileSchema)
+
+	// - Generate and redirect to LOGIN_REDIRECT_URI with ?accessToken=...
+	accessToken := loginService.GenerateAccessToken()
+
+	return c.JSON(http.StatusOK, map[string]interface{}{"accessToken": accessToken})
 }
 
 // APILoginHandler ...

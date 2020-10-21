@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/monologid/m9/config"
 	"github.com/monologid/m9/httpsvr"
 	"github.com/monologid/m9/login"
 	"github.com/spf13/cobra"
@@ -13,8 +14,9 @@ var server = &cobra.Command{
 
 var start = &cobra.Command{
 	Use:   "start",
-	Short: "Start for starting HTTP server",
+	Short: "Start for starting HTTP server.",
 	Run: func(cmd *cobra.Command, args []string) {
+		config.New(configPath)
 		svr := httpsvr.New().Initialize()
 
 		if len(args) == 0 {
@@ -33,4 +35,8 @@ var start = &cobra.Command{
 
 		svr.Start()
 	},
+}
+
+func init() {
+	start.PersistentFlags().StringVarP(&configPath, "config-path", "c", "/etc/m9", "Set config path")
 }

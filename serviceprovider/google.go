@@ -2,9 +2,9 @@ package serviceprovider
 
 import (
 	"encoding/json"
-	"os"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/monologid/m9/config"
 )
 
 // Google ...
@@ -80,17 +80,17 @@ func (g *Google) GetProfile(uri string) (*map[string]interface{}, error) {
 
 // NewGoogle ...
 func NewGoogle() IProvider {
-	apiURL := os.Getenv("GOOGLE_API_URL")
+	apiURL := config.C.Google.APIURL
 	if len(apiURL) == 0 {
 		apiURL = "https://www.googleapis.com/oauth2"
 	}
 
-	oauthURL := os.Getenv("GOOGLE_OAUTH_URL")
+	oauthURL := config.C.Google.Oauth.URL
 	if len(oauthURL) == 0 {
 		oauthURL = "https://accounts.google.com/o/oauth2"
 	}
 
-	oauthTokenURL := os.Getenv("GOOGLE_OAUTH_TOKEN_URL")
+	oauthTokenURL := config.C.Google.Oauth.TokenURL
 	if len(oauthTokenURL) == 0 {
 		oauthTokenURL = "https://oauth2.googleapis.com/token"
 	}
@@ -100,9 +100,9 @@ func NewGoogle() IProvider {
 		APIURL:           apiURL,
 		OauthURL:         oauthURL,
 		OauthTokenURL:    oauthTokenURL,
-		ClientID:         os.Getenv("GOOGLE_CLIENT_ID"),
-		ClientSecret:     os.Getenv("GOOGLE_CLIENT_SECRET"),
-		OauthRedirectURI: os.Getenv("GOOGLE_OAUTH_REDIRECT_URI"),
-		OauthScope:       os.Getenv("GOOGLE_OAUTH_SCOPE"),
+		ClientID:         config.C.Google.ClientID,
+		ClientSecret:     config.C.Google.ClientSecret,
+		OauthRedirectURI: config.C.Google.Oauth.RedirectURI,
+		OauthScope:       config.C.Google.Oauth.Scope,
 	}
 }
