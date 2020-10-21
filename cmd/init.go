@@ -9,7 +9,7 @@ var (
 	configPath     string
 	databaseEngine string
 	databaseURL    string
-	debug          bool
+	verbose        bool
 )
 
 // Initialize executes the cmd package
