@@ -8,6 +8,12 @@
   M9 is an open source software project by Monolog written in Go.
 </p>
 
+## MODULES
+
+| Module | Description |
+|--------|-------------|
+| Login  | A module that enables you to sign up and sign in using service provider, such as Facebook and Google |
+
 ## FAQ
 
 ### Who maintains M9?
