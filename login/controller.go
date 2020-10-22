@@ -11,12 +11,14 @@ import (
 func ProviderHandler(c echo.Context) error {
 	provider := c.Param("provider")
 
-	serviceProvider, err := new(serviceprovider.Provider).Get(provider)
+	serviceProvider, err := serviceprovider.New(provider)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
 	redirectURL := serviceProvider.GenerateOauthURI()
+
+	MetricInitiateLogin(provider)
 
 	return c.Redirect(http.StatusTemporaryRedirect, redirectURL)
 }
@@ -26,7 +28,7 @@ func ProviderCallbackHandler(c echo.Context) error {
 	provider := c.Param("provider")
 	code := c.QueryParam("code")
 
-	serviceProvider, err := new(serviceprovider.Provider).Get(provider)
+	serviceProvider, err := serviceprovider.New(provider)
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
@@ -34,28 +36,34 @@ func ProviderCallbackHandler(c echo.Context) error {
 	tokenURL := serviceProvider.GenerateGetAccessTokenURI(code)
 	token, err := serviceProvider.GenerateAccessToken(tokenURL)
 	if err != nil {
+		MetricLoginFailed(provider)
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
 	profileURL := serviceProvider.GenerateGetProfileURI(token.AccessToken)
 	profile, err := serviceProvider.GetProfile(profileURL)
 	if err != nil {
+		MetricLoginFailed(provider)
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	profileSchema := serviceprovider.Provider{
-		ServiceProvider: provider,
-		ProfileMetadata: *profile,
-	}
-
-	// Tasks:
-	loginService := NewService()
+	loginService := NewService(LoginRepository)
 
 	// - Store data into database
-	loginService.SignIn(profileSchema)
+	errInsert := loginService.SignInUsingServiceProvider(provider, *profile)
+	if errInsert != nil {
+		MetricLoginFailed(provider)
+		return c.String(http.StatusInternalServerError, "failed to sign in using service provider "+provider)
+	}
 
 	// - Generate and redirect to LOGIN_REDIRECT_URI with ?accessToken=...
-	accessToken := loginService.GenerateAccessToken()
+	accessToken, errGenerateAccessToken := loginService.GenerateAccessToken()
+	if errGenerateAccessToken != nil {
+		MetricLoginFailed(provider)
+		return c.String(http.StatusInternalServerError, "failed to generate access token using service provider "+provider)
+	}
+
+	MetricLoginSuccess(provider)
 
 	return c.JSON(http.StatusOK, map[string]interface{}{"accessToken": accessToken})
 }

@@ -1,8 +1,6 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/spf13/viper"
 )
 
@@ -31,6 +29,4 @@ func New(configPath string) {
 	}
 
 	C = &configSchema
-
-	fmt.Printf("%+v\n", C)
 }

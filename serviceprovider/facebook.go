@@ -19,7 +19,7 @@ type Facebook struct {
 	Fields           string
 }
 
-// Get returns ...
+// Get returns service provider
 func (fb *Facebook) Get() string {
 	return fb.ServiceProvider
 }
@@ -81,12 +81,12 @@ func (fb *Facebook) GetProfile(uri string) (*map[string]interface{}, error) {
 
 // NewFacebook ...
 func NewFacebook() IProvider {
-	graphqlURL := config.C.Facebook.GraphURL
+	var graphqlURL string = config.C.Facebook.GraphURL
 	if len(graphqlURL) == 0 {
 		graphqlURL = "https://graph.facebook.com/v4.0"
 	}
 
-	oauthURL := config.C.Facebook.Oauth.URL
+	var oauthURL string = config.C.Facebook.Oauth.URL
 	if len(oauthURL) == 0 {
 		oauthURL = "https://www.facebook.com/v4.0/dialog/oauth"
 	}

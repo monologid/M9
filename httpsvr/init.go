@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/monologid/m9/config"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // IHTTPServer ...
@@ -30,7 +31,18 @@ func (s *HTTPServer) Initialize() IHTTPServer {
 	s.server.Use(middleware.Logger())
 	s.server.Use(middleware.Recover())
 
+	s.InitiatePrometheusMetricHandler()
+
 	return s
+}
+
+// InitiatePrometheusMetricHandler ...
+func (s *HTTPServer) InitiatePrometheusMetricHandler() {
+	s.server.GET("/metrics", func(c echo.Context) error {
+		return nil
+	}, echo.WrapMiddleware(func(handler http.Handler) http.Handler {
+		return promhttp.Handler()
+	}))
 }
 
 // Server returns echo.Echo object server

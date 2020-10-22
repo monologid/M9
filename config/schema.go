@@ -5,6 +5,8 @@ import "time"
 // Schema ...
 type Schema struct {
 	Application ApplicationSchema `yaml:"application"`
+	Database    DatabaseSchema    `yaml:"database"`
+	Security    SecuritySchema    `yaml:"security"`
 	Facebook    FacebookSchema    `yaml:"facebook"`
 	Google      GoogleSchema      `yaml:"Google"`
 }
@@ -16,6 +18,22 @@ type ApplicationSchema struct {
 	ReadTimeout             time.Duration `yaml:"readTimeout"`
 	WriteTimeout            time.Duration `yaml:"writeTimeout"`
 	GracefulShutdownTimeout time.Duration `yaml:"gracefulShutdownTimeout"`
+}
+
+// DatabaseSchema ...
+type DatabaseSchema struct {
+	Engine string `yaml:"engine"`
+	URL    string `yaml:"url"`
+}
+
+// SecuritySchema ...
+type SecuritySchema struct {
+	JWT JWTSchema `yaml:"jwt"`
+}
+
+// JWTSchema ...
+type JWTSchema struct {
+	Secret string `yaml:"secret"`
 }
 
 // FacebookSchema ...

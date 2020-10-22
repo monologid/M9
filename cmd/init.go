@@ -5,11 +5,9 @@ import (
 )
 
 var (
-	module         string
-	configPath     string
-	databaseEngine string
-	databaseURL    string
-	verbose        bool
+	module     string
+	configPath string
+	verbose    bool
 )
 
 // Initialize executes the cmd package
@@ -21,6 +19,7 @@ func Initialize() {
 
 	server.AddCommand(start)
 
+	commands.AddCommand(migrate)
 	commands.AddCommand(server)
 	commands.Execute()
 }

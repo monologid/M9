@@ -1,17 +1,105 @@
 package login
 
 import (
+	"strings"
+
 	"github.com/monologid/m9/instrument"
+	"github.com/monologid/m9/serviceprovider"
 )
 
 var prometheusModuleName = "login"
 
 var (
-	PrometheusLoginDefaultTotal         = instrument.NewPrometheus().NewCounter(prometheusModuleName, "default_total", "The total number of login using Default.")
-	PrometheusLoginFacebookTotal        = instrument.NewPrometheus().NewCounter(prometheusModuleName, "facebook_total", "The total number of login using Facebook.")
-	PrometheusLoginFacebookSuccessTotal = instrument.NewPrometheus().NewCounter(prometheusModuleName, "facebook_success_total", "The total number of success login using Facebook.")
-	PrometheusLoginGoogleTotal          = instrument.NewPrometheus().NewCounter(prometheusModuleName, "google_total", "The total number of login using Google.")
-	PrometheusLoginGoogleSuccessTotal   = instrument.NewPrometheus().NewCounter(prometheusModuleName, "google_success_total", "The total number of success login using Google.")
-	PrometheusLoginTwitterTotal         = instrument.NewPrometheus().NewCounter(prometheusModuleName, "twitter_total", "The total number of login using Twitter.")
-	PrometheusLoginTwitterSuccessTotal  = instrument.NewPrometheus().NewCounter(prometheusModuleName, "twitter_success_total", "The total number of success login using Twitter.")
+	PrometheusDefaultTotal                = instrument.NewPrometheus().NewCounter(prometheusModuleName, "default_total", "The total number of login using Default.")
+	PrometheusDefaultSuccessTotal         = instrument.NewPrometheus().NewCounter(prometheusModuleName, "default_success_total", "The total number of success login using Default.")
+	PrometheusDefaultFailedTotal          = instrument.NewPrometheus().NewCounter(prometheusModuleName, "default_failed_total", "The total number of failed login using Default.")
+	PrometheusRegisterDefaultTotal        = instrument.NewPrometheus().NewCounter(prometheusModuleName, "default_register_total", "The total number of account registration using Default.")
+	PrometheusRegisterDefaultSuccessTotal = instrument.NewPrometheus().NewCounter(prometheusModuleName, "default_register_success_total", "The total number of success account registration using Default.")
+	PrometheusRegisterDefaultFailedTotal  = instrument.NewPrometheus().NewCounter(prometheusModuleName, "default_register_failed_total", "The total number of failed account registration using Default.")
+
+	PrometheusFacebookTotal                = instrument.NewPrometheus().NewCounter(prometheusModuleName, "facebook_total", "The total number of login using Facebook.")
+	PrometheusFacebookSuccessTotal         = instrument.NewPrometheus().NewCounter(prometheusModuleName, "facebook_success_total", "The total number of success login using Facebook.")
+	PrometheusFacebookFailedTotal          = instrument.NewPrometheus().NewCounter(prometheusModuleName, "facebook_failed_total", "The total number of failed login using Facebook.")
+	PrometheusRegisterFacebookTotal        = instrument.NewPrometheus().NewCounter(prometheusModuleName, "facebook_register_total", "The total number of account registration using Facebook.")
+	PrometheusRegisterFacebookSuccessTotal = instrument.NewPrometheus().NewCounter(prometheusModuleName, "facebook_register_success_total", "The total number of success account registration using Facebook.")
+	PrometheusRegisterFacebookFailedTotal  = instrument.NewPrometheus().NewCounter(prometheusModuleName, "facebook_register_failed_total", "The total number of failed account registration using Facebook.")
+
+	PrometheusGoogleTotal                = instrument.NewPrometheus().NewCounter(prometheusModuleName, "google_total", "The total number of login using Google.")
+	PrometheusGoogleSuccessTotal         = instrument.NewPrometheus().NewCounter(prometheusModuleName, "google_success_total", "The total number of success login using Google.")
+	PrometheusGoogleFailedTotal          = instrument.NewPrometheus().NewCounter(prometheusModuleName, "google_failed_total", "The total number of failed login using Google.")
+	PrometheusRegisterGoogleTotal        = instrument.NewPrometheus().NewCounter(prometheusModuleName, "google_register_total", "The total number of account registration using Google.")
+	PrometheusRegisterGoogleSuccessTotal = instrument.NewPrometheus().NewCounter(prometheusModuleName, "google_register_success_total", "The total number of success account registration using Google.")
+	PrometheusRegisterGoogleFailedTotal  = instrument.NewPrometheus().NewCounter(prometheusModuleName, "google_register_failed_total", "The total number of failed account registration using Google.")
 )
+
+// MetricInitiateLogin ...
+func MetricInitiateLogin(provider string) {
+	switch strings.ToUpper(provider) {
+	case serviceprovider.FACEBOOK:
+		PrometheusFacebookTotal.Inc()
+	case serviceprovider.GOOGLE:
+		PrometheusGoogleTotal.Inc()
+	default:
+		PrometheusDefaultTotal.Inc()
+	}
+}
+
+// MetricLoginSuccess ...
+func MetricLoginSuccess(provider string) {
+	switch strings.ToUpper(provider) {
+	case serviceprovider.FACEBOOK:
+		PrometheusFacebookSuccessTotal.Inc()
+	case serviceprovider.GOOGLE:
+		PrometheusGoogleSuccessTotal.Inc()
+	default:
+		PrometheusDefaultSuccessTotal.Inc()
+	}
+}
+
+// MetricLoginFailed ...
+func MetricLoginFailed(provider string) {
+	switch strings.ToUpper(provider) {
+	case serviceprovider.FACEBOOK:
+		PrometheusFacebookFailedTotal.Inc()
+	case serviceprovider.GOOGLE:
+		PrometheusGoogleFailedTotal.Inc()
+	default:
+		PrometheusDefaultFailedTotal.Inc()
+	}
+}
+
+// MetricInitiateAccountRegistration ...
+func MetricInitiateAccountRegistration(provider string) {
+	switch strings.ToUpper(provider) {
+	case serviceprovider.FACEBOOK:
+		PrometheusRegisterFacebookTotal.Inc()
+	case serviceprovider.GOOGLE:
+		PrometheusRegisterGoogleTotal.Inc()
+	default:
+		PrometheusRegisterDefaultTotal.Inc()
+	}
+}
+
+// MetricInitiateAccountRegistrationSuccess ...
+func MetricInitiateAccountRegistrationSuccess(provider string) {
+	switch strings.ToUpper(provider) {
+	case serviceprovider.FACEBOOK:
+		PrometheusRegisterFacebookSuccessTotal.Inc()
+	case serviceprovider.GOOGLE:
+		PrometheusRegisterGoogleSuccessTotal.Inc()
+	default:
+		PrometheusRegisterDefaultSuccessTotal.Inc()
+	}
+}
+
+// MetricInitiateAccountRegistrationFailed ...
+func MetricInitiateAccountRegistrationFailed(provider string) {
+	switch strings.ToUpper(provider) {
+	case serviceprovider.FACEBOOK:
+		PrometheusRegisterFacebookFailedTotal.Inc()
+	case serviceprovider.GOOGLE:
+		PrometheusRegisterGoogleFailedTotal.Inc()
+	default:
+		PrometheusRegisterDefaultFailedTotal.Inc()
+	}
+}

@@ -25,12 +25,8 @@ type IProvider interface {
 	GetProfile(uri string) (*map[string]interface{}, error)
 }
 
-// Provider ...
-type Provider struct {
-}
-
-// Get returns the service provider object
-func (sp *Provider) Get(serviceProvider string) (IProvider, error) {
+// New initates service provider object based on provided service provider
+func New(serviceProvider string) (IProvider, error) {
 	var provider IProvider
 	var err error
 

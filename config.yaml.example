@@ -1,3 +1,4 @@
+# Application server related configuration
 application:
   host: 0.0.0.0
   port: 1323
@@ -5,22 +6,50 @@ application:
   writeTimeout: 10
   gracefulShutdownTimeout: 10
 
+# Database related configuration
+database:
+  # available engine: postgres, mysql
+  engine: postgres
+
+  # please refer to https://gorm.io/docs/connecting_to_the_database.html for connection string example
+  url: user=postgres password=password dbname=m9 host=localhost port=5432 sslmode=disable
+
+# Security related configuration
+security:
+  jwt:
+    # Change the JWT secret
+    # All environment (dev, staging, production) should have different secrets
+    secret: ''
+
+# Facebook related configuration
 facebook:
+  # For Facebook clientId and clientSecret, you can create a new app in https://developers.facebook.com/
+  # The Facebook clientId is also known as appId and clientSecret as appSecret
   clientId: ''
   clientSecret: ''
-  graphURL: https://graph.facebook.com/v4.0 # optional, you can change according to your requirement
+
+  # optional, you can change according to your requirement
+  graphURL: https://graph.facebook.com/v4.0
   oauth:
-    url: https://www.facebook.com/v4.0/dialog/oauth # optional, you can change according to your requirement
+    # optional, you can change according to your requirement
+    url: https://www.facebook.com/v4.0/dialog/oauth
     redirectUri: http://localhost:1323/login/oauth2/facebook/callback
     scope: email
-    fields: 'id,first_name,last_name,email,birthday,location'
+    fields: 'id,first_name,last_name,email,birthday,location,picture.type(large){url}'
 
+# Google related configuration
 google:
+  # for clientId and clientSecret, you can retrieve it from https://console.developers.google.com/apis/credentials
   clientId: ''
   clientSecret: ''
-  apiUrl: https://www.googleapis.com/oauth2 # optional, you can change according to your requirement
+
+  # optional, you can change according to your requirement
+  apiUrl: https://www.googleapis.com/oauth2
   oauth:
-    url: https://accounts.google.com/o/oauth2 # optional, you can change according to your requirement
-    tokenUrl: https://oauth2.googleapis.com/token # optional, you can change according to your requirement
+    # optional, you can change according to your requirement
+    url: https://accounts.google.com/o/oauth2
+
+    # optional, you can change according to your requirement
+    tokenUrl: https://oauth2.googleapis.com/token
     redirectUri: http://localhost:1323/login/oauth2/google/callback
     scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'

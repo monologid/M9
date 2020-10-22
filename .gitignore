@@ -14,6 +14,10 @@
 # Dependency directories (remove the comment below to include it)
 vendor/
 .dev/
+tmp/
 
-# Config file
+# Files
 config.yaml
+air.toml
+dev.sh
+m9

@@ -7,6 +7,18 @@ import (
 	"github.com/monologid/m9/config"
 )
 
+// GoogleSchema ...
+type GoogleSchema struct {
+	Sub           string
+	Name          string
+	GivenName     string
+	FamilyName    string
+	Picture       string
+	Locale        string
+	Email         string
+	EmailVerified bool
+}
+
 // Google ...
 type Google struct {
 	ServiceProvider  string
