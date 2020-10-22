@@ -9,6 +9,8 @@ type Schema struct {
 	Security    SecuritySchema    `yaml:"security"`
 	Facebook    FacebookSchema    `yaml:"facebook"`
 	Google      GoogleSchema      `yaml:"Google"`
+
+	Module ModuleSchema `yaml:"module"`
 }
 
 // ApplicationSchema ...
@@ -66,4 +68,15 @@ type GoogleOauthSchema struct {
 	TokenURL    string `yaml:"tokenUrl"`
 	RedirectURI string `yaml:"redirectUri"`
 	Scope       string `yaml:"scope"`
+}
+
+// ModuleSchema ...
+type ModuleSchema struct {
+	Login ModuleLoginSchema `yaml:"login"`
+}
+
+// ModuleLoginSchema ...
+type ModuleLoginSchema struct {
+	IsRedirect  bool   `yaml:"isRedirect"`
+	RedirectURI string `yaml:"redirectUri"`
 }

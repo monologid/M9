@@ -9,4 +9,4 @@ M9 / PROJECT DOCUMENTATION
 |-----------|--------|
 | Create a feature to login/register using Facebook | DONE |
 | Create a feature to login/register using Google | DONE |
-| Create to redirect to target URL after access token is genereted when login using service Provider | BACKLOG |
+| Create a redirect to target URL feature (if enabled) after access token is genereted when login using service Provider | DONE |

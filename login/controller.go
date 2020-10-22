@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/monologid/m9/config"
 	"github.com/monologid/m9/serviceprovider"
 )
 
@@ -64,6 +65,11 @@ func ProviderCallbackHandler(c echo.Context) error {
 	}
 
 	MetricLoginSuccess(provider)
+
+	if config.C.Module.Login.IsRedirect {
+		redirectURL := config.C.Module.Login.RedirectURI + "?accessToken=" + accessToken
+		return c.Redirect(http.StatusTemporaryRedirect, redirectURL)
+	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{"accessToken": accessToken})
 }
