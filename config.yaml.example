@@ -53,3 +53,8 @@ google:
     tokenUrl: https://oauth2.googleapis.com/token
     redirectUri: http://localhost:1323/login/oauth2/google/callback
     scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
+
+module:
+  login:
+    isRedirect: true
+    redirectUri: https://monolog.id/auth
