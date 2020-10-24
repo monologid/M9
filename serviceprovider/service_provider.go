@@ -13,7 +13,8 @@ var (
 	GOOGLE = "GOOGLE"
 )
 
-// IProvider ...
+// IProvider is an interface that should be implemented
+// when creating a service provider object
 type IProvider interface {
 	Get() string
 

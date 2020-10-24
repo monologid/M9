@@ -5,13 +5,13 @@ import (
 	"gorm.io/gorm"
 )
 
-// IRepository ...
+// IRepository is an interface for login repository
 type IRepository interface {
 	FindOneByEmail(email string) (*AccountModel, error)
 	Insert(account AccountModel) error
 }
 
-// Repository ...
+// Repository is the implementation of login.IRepository
 type Repository struct {
 	DB                          *gorm.DB
 	TableAccount                *gorm.DB
@@ -29,7 +29,7 @@ func (r *Repository) FindOneByEmail(email string) (*AccountModel, error) {
 	return &account, nil
 }
 
-// Insert ...
+// Insert inserts new account data
 func (r *Repository) Insert(account AccountModel) error {
 	account.GenerateID()
 	account.AccountServiceProvider.GenerateID()

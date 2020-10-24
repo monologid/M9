@@ -27,7 +27,7 @@ var start = &cobra.Command{
 		if len(args) == 0 {
 			login.New(svr.Server())
 
-			svr.Start()
+			svr.Start(verbose)
 			return
 		}
 
@@ -38,7 +38,7 @@ var start = &cobra.Command{
 			login.New(svr.Server())
 		}
 
-		svr.Start()
+		svr.Start(verbose)
 	},
 }
 

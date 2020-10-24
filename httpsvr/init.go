@@ -13,21 +13,22 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-// IHTTPServer ...
+// IHTTPServer is an interface for http server
 type IHTTPServer interface {
 	Initialize() IHTTPServer
 	Server() *echo.Echo
-	Start()
+	Start(debug bool)
 }
 
-// HTTPServer ...
+// HTTPServer is an implementation for IHTTPServer
 type HTTPServer struct {
 	server *echo.Echo
 }
 
-// Initialize ...
+// Initialize initiates new http server
 func (s *HTTPServer) Initialize() IHTTPServer {
 	s.server = echo.New()
+	s.server.HideBanner = true
 	s.server.Use(middleware.Logger())
 	s.server.Use(middleware.Recover())
 
@@ -36,7 +37,7 @@ func (s *HTTPServer) Initialize() IHTTPServer {
 	return s
 }
 
-// InitiatePrometheusMetricHandler ...
+// InitiatePrometheusMetricHandler handles the prometheus metrics
 func (s *HTTPServer) InitiatePrometheusMetricHandler() {
 	s.server.GET("/metrics", func(c echo.Context) error {
 		return nil
@@ -50,8 +51,10 @@ func (s *HTTPServer) Server() *echo.Echo {
 	return s.server
 }
 
-// Start ...
-func (s *HTTPServer) Start() {
+// Start starts http server
+func (s *HTTPServer) Start(debug bool) {
+	s.server.Debug = debug
+
 	host := config.C.Application.Host
 	port := config.C.Application.Port
 
@@ -77,7 +80,7 @@ func (s *HTTPServer) Start() {
 	}
 }
 
-// New ...
+// New initiates new http server object
 func New() IHTTPServer {
 	return &HTTPServer{}
 }

@@ -2,7 +2,7 @@ package config
 
 import "time"
 
-// Schema ...
+// Schema is a base schema for configuration
 type Schema struct {
 	Application ApplicationSchema `yaml:"application"`
 	Database    DatabaseSchema    `yaml:"database"`
@@ -13,7 +13,7 @@ type Schema struct {
 	Module ModuleSchema `yaml:"module"`
 }
 
-// ApplicationSchema ...
+// ApplicationSchema is a schema related with application configuration
 type ApplicationSchema struct {
 	Host                    string        `yaml:"host"`
 	Port                    string        `yaml:"port"`
@@ -22,23 +22,23 @@ type ApplicationSchema struct {
 	GracefulShutdownTimeout time.Duration `yaml:"gracefulShutdownTimeout"`
 }
 
-// DatabaseSchema ...
+// DatabaseSchema is a schema related with database configuration
 type DatabaseSchema struct {
 	Engine string `yaml:"engine"`
 	URL    string `yaml:"url"`
 }
 
-// SecuritySchema ...
+// SecuritySchema is a schema related with security configuration
 type SecuritySchema struct {
 	JWT JWTSchema `yaml:"jwt"`
 }
 
-// JWTSchema ...
+// JWTSchema is a schema related with JWT configuration
 type JWTSchema struct {
 	Secret string `yaml:"secret"`
 }
 
-// FacebookSchema ...
+// FacebookSchema is a schema related with Facebook configuration
 type FacebookSchema struct {
 	ClientID     string              `yaml:"clientId"`
 	ClientSecret string              `yaml:"clientSecret"`
@@ -46,7 +46,7 @@ type FacebookSchema struct {
 	Oauth        FacebookOauthSchema `yaml:"oauth"`
 }
 
-// FacebookOauthSchema ...
+// FacebookOauthSchema is a schema related with Facebook OAuth configuration
 type FacebookOauthSchema struct {
 	URL         string `yaml:"url"`
 	RedirectURI string `yaml:"redirectUri"`
@@ -54,7 +54,7 @@ type FacebookOauthSchema struct {
 	Fields      string `yaml:"fields"`
 }
 
-// GoogleSchema ...
+// GoogleSchema is a schema related with Google configuration
 type GoogleSchema struct {
 	ClientID     string            `yaml:"clientId"`
 	ClientSecret string            `yaml:"clientSecret"`
@@ -62,7 +62,7 @@ type GoogleSchema struct {
 	Oauth        GoogleOauthSchema `yaml:"oauth"`
 }
 
-// GoogleOauthSchema ...
+// GoogleOauthSchema is a schema related with Google OAuth configuration
 type GoogleOauthSchema struct {
 	URL         string `yaml:"url"`
 	TokenURL    string `yaml:"tokenUrl"`
@@ -70,12 +70,12 @@ type GoogleOauthSchema struct {
 	Scope       string `yaml:"scope"`
 }
 
-// ModuleSchema ...
+// ModuleSchema is a schema related with module configuration
 type ModuleSchema struct {
 	Login ModuleLoginSchema `yaml:"login"`
 }
 
-// ModuleLoginSchema ...
+// ModuleLoginSchema is a schema related with login module configuration
 type ModuleLoginSchema struct {
 	IsRedirect  bool   `yaml:"isRedirect"`
 	RedirectURI string `yaml:"redirectUri"`

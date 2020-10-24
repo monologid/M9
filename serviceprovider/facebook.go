@@ -7,7 +7,7 @@ import (
 	"github.com/monologid/m9/config"
 )
 
-// Facebook ...
+// Facebook represents the Facebook service provider
 type Facebook struct {
 	ServiceProvider  string
 	GraphURL         string
@@ -24,7 +24,8 @@ func (fb *Facebook) Get() string {
 	return fb.ServiceProvider
 }
 
-// GenerateOauthURI ...
+// GenerateOauthURI returns an oauth URI that will be use by the M9
+// to redirect to Facebook to the generate the code
 func (fb *Facebook) GenerateOauthURI() string {
 	return fb.OauthURL +
 		"?client_id=" + fb.ClientID +
@@ -32,7 +33,7 @@ func (fb *Facebook) GenerateOauthURI() string {
 		"&scope=" + fb.OauthScope
 }
 
-// GenerateGetAccessTokenURI ...
+// GenerateGetAccessTokenURI returns an oauth URI to generate access token from Facebook
 func (fb *Facebook) GenerateGetAccessTokenURI(code string) string {
 	return fb.GraphURL + "/oauth/access_token" +
 		"?client_id=" + fb.ClientID +
@@ -42,14 +43,14 @@ func (fb *Facebook) GenerateGetAccessTokenURI(code string) string {
 		"&grant_type=authorization_code"
 }
 
-// GenerateGetProfileURI ...
+// GenerateGetProfileURI returns a URI to get Facebook profile
 func (fb *Facebook) GenerateGetProfileURI(accessToken string) string {
 	return fb.GraphURL + "/me" +
 		"?fields=" + fb.Fields +
 		"&access_token=" + accessToken
 }
 
-// GenerateAccessToken ...
+// GenerateAccessToken generates a Facebook access token
 func (fb *Facebook) GenerateAccessToken(uri string) (*AccessTokenSchema, error) {
 	resp, err := resty.New().R().Get(uri)
 	if err != nil {
@@ -64,7 +65,7 @@ func (fb *Facebook) GenerateAccessToken(uri string) (*AccessTokenSchema, error) 
 	return &accesTokenSchema, nil
 }
 
-// GetProfile ...
+// GetProfile returns the Facebook profile using the generated access token
 func (fb *Facebook) GetProfile(uri string) (*map[string]interface{}, error) {
 	resp, err := resty.New().R().Get(uri)
 	if err != nil {
@@ -79,7 +80,7 @@ func (fb *Facebook) GetProfile(uri string) (*map[string]interface{}, error) {
 	return &profileSchema, nil
 }
 
-// NewFacebook ...
+// NewFacebook initiates Faceboook service provider
 func NewFacebook() IProvider {
 	var graphqlURL string = config.C.Facebook.GraphURL
 	if len(graphqlURL) == 0 {

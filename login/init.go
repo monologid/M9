@@ -5,17 +5,17 @@ import (
 )
 
 var (
-	// LoginRepository ...
 	LoginRepository IRepository
 )
 
-// New ...
+// New initiates login module by registering the API endpoint into the server
 func New(app *echo.Echo) {
 	LoginRepository = NewRepository()
 
 	app.GET("/login/oauth2/:provider", ProviderHandler)
 	app.GET("/login/oauth2/:provider/callback", ProviderCallbackHandler)
 
-	app.GET("/api/v1/login", APILoginHandler)
-	app.POST("/api/v1/register", APIRegisterHandler)
+	app.POST("/login/api/v1/sign-up", APIRegisterHandler)
+	app.POST("/login/api/v1/sign-in", APILoginHandler)
+	app.GET("/login/api/v1/access-token/validate", APIValidateAccessTokenHandler)
 }

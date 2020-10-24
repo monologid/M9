@@ -1,0 +1,28 @@
+@host = http://localhost:1323
+@contentTypeJson = application/json
+
+### REGISTER NEW ACCOUNT VIA API
+
+POST {{ host }}/login/api/v1/sign-up
+content-type: {{ contentTypeJson }}
+
+{
+  "first_name": "monolog",
+  "last_name": "indonesia",
+  "email": "hello@monolog.id",
+  "password": "indonesia"
+}
+
+### LOGIN VIA API
+
+POST {{ host }}/login/api/v1/sign-in
+content-type: {{ contentTypeJson }}
+
+{
+  "email": "hello@monolog.id",
+  "password": "indonesia"
+}
+
+### VALIDATE ACCESS TOKEN
+
+GET {{ HOST_ADDR }}/login/api/v1/access-token/validate?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI3ZjZiMzI4Mi1lZGViLTRhN2YtOGUzZC05NzYzYmRmM2RkYTUiLCJlbWFpbCI6ImhlbGxvQG1vbm9sb2cuaWQiLCJmaXJzdE5hbWUiOiJtb25vbG9nIiwibGFzdE5hbWUiOiJpbmRvbmVzaWEiLCJwcm9maWxlUGljIjoiIn0.SHl9EI9wbU5SvVnLH4yTnz3aHCw00Gs-A_mJFdQAmAk

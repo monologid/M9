@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-// DB ...
+// DB is a global variable for database
 var DB *gorm.DB
 
 // NewMysql returns database object using mysql as database engine

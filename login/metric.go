@@ -32,7 +32,7 @@ var (
 	PrometheusRegisterGoogleFailedTotal  = instrument.NewPrometheus().NewCounter(prometheusModuleName, "google_register_failed_total", "The total number of failed account registration using Google.")
 )
 
-// MetricInitiateLogin ...
+// MetricInitiateLogin increases the metric when iniate a login
 func MetricInitiateLogin(provider string) {
 	switch strings.ToUpper(provider) {
 	case serviceprovider.FACEBOOK:
@@ -44,7 +44,7 @@ func MetricInitiateLogin(provider string) {
 	}
 }
 
-// MetricLoginSuccess ...
+// MetricLoginSuccess increases the metric when login is success
 func MetricLoginSuccess(provider string) {
 	switch strings.ToUpper(provider) {
 	case serviceprovider.FACEBOOK:
@@ -56,7 +56,7 @@ func MetricLoginSuccess(provider string) {
 	}
 }
 
-// MetricLoginFailed ...
+// MetricLoginFailed increases the metric when login is failed
 func MetricLoginFailed(provider string) {
 	switch strings.ToUpper(provider) {
 	case serviceprovider.FACEBOOK:
@@ -68,7 +68,7 @@ func MetricLoginFailed(provider string) {
 	}
 }
 
-// MetricInitiateAccountRegistration ...
+// MetricInitiateAccountRegistration increases the metric when there's a new account registration
 func MetricInitiateAccountRegistration(provider string) {
 	switch strings.ToUpper(provider) {
 	case serviceprovider.FACEBOOK:
@@ -80,7 +80,7 @@ func MetricInitiateAccountRegistration(provider string) {
 	}
 }
 
-// MetricInitiateAccountRegistrationSuccess ...
+// MetricInitiateAccountRegistrationSuccess increases the metric when new account registration is success
 func MetricInitiateAccountRegistrationSuccess(provider string) {
 	switch strings.ToUpper(provider) {
 	case serviceprovider.FACEBOOK:
@@ -92,7 +92,7 @@ func MetricInitiateAccountRegistrationSuccess(provider string) {
 	}
 }
 
-// MetricInitiateAccountRegistrationFailed ...
+// MetricInitiateAccountRegistrationFailed increases the metric when new account registration is success
 func MetricInitiateAccountRegistrationFailed(provider string) {
 	switch strings.ToUpper(provider) {
 	case serviceprovider.FACEBOOK:

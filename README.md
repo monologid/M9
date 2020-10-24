@@ -12,7 +12,7 @@
 
 | Module | Description |
 |--------|-------------|
-| Login  | A module that enables you to sign up and sign in using service provider, such as Facebook and Google |
+| [Login](./login)  | A module that enables you to sign up and sign in using service provider, such as Facebook and Google |
 
 ## FAQ
 

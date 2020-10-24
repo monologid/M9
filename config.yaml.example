@@ -54,7 +54,17 @@ google:
     redirectUri: http://localhost:1323/login/oauth2/google/callback
     scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
 
+# Module configuration
 module:
+  # Login module configuration
   login:
+    # Set this to true to redirect to your application to receive the access token
+    # otherwise the response will be return as JSON when login using service provider
     isRedirect: true
+
+    # Set the target redirect URI, so once you login using service provider
+    # it will redirect you to target URI along with the access token
+    # .e.g. https://monolog.id/auth?accessToken=...
+    # then you can get the accessToken from the query string
+    # and store in session, cookies or even localStorage for your SPA.
     redirectUri: https://monolog.id/auth

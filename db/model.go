@@ -6,7 +6,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// Model ...
+// Model is the default schema for database module
+// This should be include in all schema model
 type Model struct {
 	ID        uuid.UUID `gorm:"column:_id;type:uuid;not null;unique;primaryKey;index;"`
 	CreatedAt time.Time `gorm:"default:now()"`
@@ -14,7 +15,7 @@ type Model struct {
 	DeletedAt *time.Time
 }
 
-// GenerateID ...
+// GenerateID will generate a random UUID and set it into the ID
 func (m *Model) GenerateID() {
 	m.ID, _ = uuid.NewRandom()
 }

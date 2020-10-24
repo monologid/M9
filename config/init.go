@@ -4,10 +4,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-// C ...
+// C is a global variable to access the config
 var C *Schema
 
-// New ...
+// New initiates the application configuration
 func New(configPath string) {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
