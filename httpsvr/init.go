@@ -32,13 +32,19 @@ func (s *HTTPServer) Initialize() IHTTPServer {
 	s.server.Use(middleware.Logger())
 	s.server.Use(middleware.Recover())
 
-	s.InitiatePrometheusMetricHandler()
+	s.initiateHealthCheckEndpoint()
+	s.initiatePrometheusMetricHandler()
 
 	return s
 }
 
-// InitiatePrometheusMetricHandler handles the prometheus metrics
-func (s *HTTPServer) InitiatePrometheusMetricHandler() {
+func (s *HTTPServer) initiateHealthCheckEndpoint() {
+	s.server.GET("/health-check", func(c echo.Context) error {
+		return c.String(http.StatusOK, "OK")
+	})
+}
+
+func (s *HTTPServer) initiatePrometheusMetricHandler() {
 	s.server.GET("/metrics", func(c echo.Context) error {
 		return nil
 	}, echo.WrapMiddleware(func(handler http.Handler) http.Handler {
