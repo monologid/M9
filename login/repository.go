@@ -13,16 +13,14 @@ type IRepository interface {
 
 // Repository is the implementation of login.IRepository
 type Repository struct {
-	DB                          *gorm.DB
-	TableAccount                *gorm.DB
-	TableAccountServiceProvider *gorm.DB
+	DB *gorm.DB
 }
 
 // FindOneByEmail returns account data filtered by email
 func (r *Repository) FindOneByEmail(email string) (*AccountModel, error) {
 	var account AccountModel
 
-	if err := r.TableAccount.Where("email = ?", email).Find(&account).Error; err != nil {
+	if err := r.DB.Table("account").Where("email = ?", email).Find(&account).Error; err != nil {
 		return nil, err
 	}
 
@@ -40,8 +38,6 @@ func (r *Repository) Insert(account AccountModel) error {
 // NewRepository initiates login repository
 func NewRepository() IRepository {
 	return &Repository{
-		DB:                          db.DB,
-		TableAccount:                db.DB.Table("account"),
-		TableAccountServiceProvider: db.DB.Table("account_service_provider"),
+		DB: db.DB,
 	}
 }

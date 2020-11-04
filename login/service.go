@@ -162,6 +162,15 @@ func (s *Service) SignIn(loginReq ReqLoginModel) error {
 // GenerateAccessToken returns access token in JWT format.
 // The claim is based on data when being set in registration or login methods using the AccountModel.
 func (s *Service) GenerateAccessToken() (string, error) {
+	if s.Account.ID.String() == "00000000-0000-0000-0000-000000000000" {
+		tempAccount, err := s.LoginRepository.FindOneByEmail(s.Account.Email)
+		if err != nil {
+			return "", err
+		}
+
+		s.Account.ID = tempAccount.ID
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"_id":        s.Account.ID,
 		"firstName":  s.Account.FirstName,
